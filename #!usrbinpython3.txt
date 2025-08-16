@@ -1,0 +1,42 @@
+#!/usr/bin/python3
+import socket
+
+# Common ports and their services
+common_ports = {
+    20: "FTP (Data Transfer)",
+    21: "FTP (Control)",
+    22: "SSH (Secure Shell)",
+    23: "Telnet",
+    25: "SMTP (Mail Transfer)",
+    53: "DNS (Domain Name System)",
+    67: "DHCP (Server)",
+    68: "DHCP (Client)",
+    80: "HTTP (Web Server)",
+    110: "POP3 (Email Receive)",
+    143: "IMAP (Email Receive)",
+    161: "SNMP (Monitoring)",
+    389: "LDAP (Directory Service)",
+    443: "HTTPS (Secure Web)",
+    445: "SMB (Windows Sharing)",
+    3306: "MySQL Database",
+    3389: "RDP (Remote Desktop)",
+    5432: "PostgreSQL Database",
+    8080: "HTTP Alternate"
+}
+
+# User input
+target_host = input("Enter Target IP: ")
+target_ports = range(1, 1025)  # Scanning 1–1024
+
+print(f"\n🔎 Scanning {target_host} for open ports...\n")
+
+for port in target_ports:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(1)
+    
+    result = sock.connect_ex((target_host, port))  # 0 = open
+    if result == 0:
+        service = common_ports.get(port, "Unknown Service")
+        print(f"✅ Port {port} is OPEN → {service}")
+    
+    sock.close()
